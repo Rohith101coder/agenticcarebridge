@@ -6,32 +6,32 @@ import {
   FaCalendarAlt
 } from "react-icons/fa";
 
-const OrphanageStats = () => {
+const OrphanageStats = ({overview}) => {
   const stats = [
     {
       icon: <FaChild />,
       title: "Children",
-      value: "32",
-      color: "success"
+      value: overview?.childrenCount || "0",
+      color: "success",
     },
     {
       icon: <FaBox />,
       title: "Active Needs",
-      value: "7",
-      color: "warning"
+      value: overview?.activeNeedsCount || "0",
+      color: "warning",
     },
     {
       icon: <FaRupeeSign />,
       title: "Total Donations",
-      value: "₹ 24,800",
-      color: "success"
+      value: "₹" + (overview?.totalDonationsAmount || "0"),
+      color: "success",
     },
     {
       icon: <FaCalendarAlt />,
       title: "Upcoming Visits",
-      value: "3",
-      color: "primary"
-    }
+      value: overview?.upcomingVisitsCount || "0",
+      color: "primary",
+    },
   ];
 
   return (

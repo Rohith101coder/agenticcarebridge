@@ -1,23 +1,23 @@
 import React from "react";
 import { FaHeart } from "react-icons/fa";
 
-const ImpactSummary = () => {
+const ImpactSummary = ({impact}) => {
   const impactData = [
     {
       id: 1,
-      number: "18",
-      title: "Items Donated"
+      number: impact?.itemsDonated || 0,
+      title: "Items Donated",
     },
     {
       id: 2,
-      number: "5",
-      title: "Visits Booked"
+      number: impact?.visitsMade || 0,
+      title: "Visits Made",
     },
     {
       id: 3,
-      number: "32+",
-      title: "Children Impacted"
-    }
+      number: impact?.childrenImpacted || 0,
+      title: "Children Impacted",
+    },
   ];
 
   return (

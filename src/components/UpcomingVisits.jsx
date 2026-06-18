@@ -1,7 +1,7 @@
 import React from "react";
 
-const UpcomingVisits = () => {
-  const visits = [
+const UpcomingVisits = ({visits: visitsProp}) => {
+  const visits = visitsProp || [
     {
       donor: "Rahul Sharma",
       purpose: "Birthday Celebration",
@@ -27,55 +27,40 @@ const UpcomingVisits = () => {
 
   return (
     <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
-
       {/* Heading */}
       <div className="d-flex justify-content-between mb-4">
-        <h5 className="fw-bold">
-          Upcoming Visits
-        </h5>
+        <h5 className="fw-bold">Upcoming Visits</h5>
 
-        <small className="text-success fw-semibold">
-          View all
-        </small>
+        <small className="text-success fw-semibold">View all</small>
       </div>
 
       {/* Visit List */}
       {visits.map((item, index) => (
-        <div
-          key={index}
-          className="border rounded-3 p-3 mb-3"
-        >
+        <div key={index} className="border rounded-3 p-3 mb-3">
           <div className="d-flex justify-content-between align-items-start">
-
             <div>
-              <h6 className="fw-bold mb-1">
-                {item.donor}
-              </h6>
+              <h6 className="fw-bold mb-1">{item.donorName}</h6>
 
-              <small className="text-muted d-block">
-                {item.purpose}
-              </small>
+              <small className="text-muted d-block">{item.purpose}</small>
 
               <small className="text-muted">
-                {item.date} • {item.time}
+                {item.visitDate} • {item.visitTime}
               </small>
             </div>
 
             {/* Status Badge */}
             <span
               className={`badge ${
-                item.status === "Confirmed"
+                item.status === "CONFIRMED"
                   ? "bg-success"
                   : "bg-warning text-dark"
               }`}
             >
               {item.status}
             </span>
-
           </div>
         </div>
       ))}
-
     </div>
   );
 };

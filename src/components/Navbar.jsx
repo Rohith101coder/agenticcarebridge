@@ -8,10 +8,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg bg-white shadow-sm py-3">
       <div className="container-fluid">
         {/* Logo + Name */}
-        <Link
-          to="/"
-          className="navbar-brand d-flex align-items-center gap-2"
-        >
+        <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
           <img
             src={logo}
             alt="CareBridge Logo"
@@ -20,11 +17,10 @@ const Navbar = () => {
             className="img-fluid"
           />
           <div>
-
-            <span className="fw-bold fs-4">
-              CareBridge
-            </span>
-            <p className="text-secondary small m-0">Bridging Hearts, Building Futures</p>
+            <span className="fw-bold fs-4">CareBridge</span>
+            <p className="text-secondary small m-0">
+              Bridging Hearts, Building Futures
+            </p>
           </div>
         </Link>
 
@@ -43,7 +39,6 @@ const Navbar = () => {
 
         {/* Navbar Links */}
         <div className="collapse navbar-collapse" id="navbarNav">
-
           {/* Center Links */}
           <ul className="navbar-nav mx-auto gap-3">
             <li className="nav-item">
@@ -69,12 +64,9 @@ const Navbar = () => {
 
             <li className="nav-item">
               <Link className="nav-link fw-medium" to="/needs">
-
                 Needs
               </Link>
             </li>
-
-
 
             <li className="nav-item">
               <Link className="nav-link fw-medium" to="/contact">
@@ -88,18 +80,16 @@ const Navbar = () => {
             <FaSearch
               style={{
                 cursor: "pointer",
-                fontSize: "18px"
+                fontSize: "18px",
               }}
             />
 
-            <button className="btn btn-outline-success">
-              Login
-            </button>
+            <Link to="/login">
+              <button className="btn btn-outline-success">Login</button>
+            </Link>
 
             <Link to="/register">
-              <button className="btn btn-success">
-                Sign Up
-              </button>
+              <button className="btn btn-success">Sign Up</button>
             </Link>
           </div>
         </div>

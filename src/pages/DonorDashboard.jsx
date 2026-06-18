@@ -7,10 +7,13 @@ import UpcomingBookings from "../components/UpcomingBookings";
 import RecentDonations from "../components/RecentDonations";
 import ImpactSummary from "../components/ImpactSummary";
 import Footer from "../components/Footer";
+import { getdonorDashBoardDetails } from "../apis/donorApis";
 
 const DonorDashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [profileStatus, setProfileStatus] = useState("LOADING");
+  const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,22 +45,55 @@ const DonorDashboard = () => {
     }
   };
 
+  useEffect(() => {
+    const loadDashboard = async () => {
+      try {
+        const data = await getdonorDashBoardDetails();
+        console.log(data);
+        
+        setDashboardData(data);
+        setProfileStatus("READY");
+      } catch (error) {
+        console.log("STATUS:", error.response?.status);
+        console.log("DATA:", error.response?.data);
+
+        if (
+          error.response?.status === 404 &&
+          error.response?.data?.message === "profile not found"
+        ) {
+          setProfileStatus("NO_PROFILE");
+        } else if (
+          error.response?.data?.message === "profile not activated yet"
+        ) {
+          setProfileStatus("NOT_VERIFIED");
+        }
+      }
+    };
+
+    loadDashboard();
+  }, []);
+
+  if (profileStatus === "LOADING") {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-success" />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="d-flex position-relative">
-
         {/* Sidebar */}
         {showSidebar && (
           <div
-            className={`${
-              isMobile ? "position-fixed" : ""
-            } bg-white`}
+            className={`${isMobile ? "position-fixed" : ""} bg-white`}
             style={{
               width: "250px",
               height: "100vh",
               top: 0,
               left: 0,
-              zIndex: 1050
+              zIndex: 1050,
             }}
           >
             <DonorSidebar />
@@ -70,7 +106,7 @@ const DonorDashboard = () => {
             className="position-fixed top-0 start-0 w-100 h-100"
             style={{
               backgroundColor: "rgba(0,0,0,0.4)",
-              zIndex: 1040
+              zIndex: 1040,
             }}
             onClick={toggleSidebar}
           />
@@ -80,7 +116,7 @@ const DonorDashboard = () => {
         <div
           className="flex-grow-1 p-4 bg-light"
           style={{
-            marginLeft: !isMobile ? "0" : "0"
+            marginLeft: !isMobile ? "0" : "0",
           }}
         >
           {/* Header */}
@@ -88,11 +124,13 @@ const DonorDashboard = () => {
             isMobile={isMobile}
             toggleSidebar={toggleSidebar}
             showSidebar={showSidebar}
+            profileStatus={profileStatus}
+            donorData={dashboardData?.donorData}
           />
 
           {/* Welcome Section */}
           <h2 className="fw-bold">
-            Welcome back, Vamshi!
+            Welcome back, {dashboardData?.donorData?.name || "Donor"}!
           </h2>
 
           <p className="text-muted">
@@ -100,27 +138,31 @@ const DonorDashboard = () => {
           </p>
 
           {/* Stats */}
-          <DonorStats />
+          <DonorStats donorStats={dashboardData?.donorStats} />
 
           {/* Top Section */}
           <div className="row g-4 mb-4">
             <div className="col-lg-8">
-              <UrgentNeeds />
+              <UrgentNeeds urgentNeeds={dashboardData?.urgentNeeds || []} />
             </div>
 
             <div className="col-lg-4">
-              <UpcomingBookings />
+              <UpcomingBookings
+                upcomingBookings={dashboardData?.upcomingBookings || []}
+              />
             </div>
           </div>
 
           {/* Bottom Section */}
           <div className="row g-4">
             <div className="col-lg-8">
-              <RecentDonations />
+              <RecentDonations
+                recentDonations={dashboardData?.recentDonations || []}
+              />
             </div>
 
             <div className="col-lg-4">
-              <ImpactSummary />
+              <ImpactSummary impact={dashboardData?.donorImpactSummary} />
             </div>
           </div>
         </div>

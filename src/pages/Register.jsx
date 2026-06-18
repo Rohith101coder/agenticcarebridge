@@ -3,6 +3,7 @@ import kidsImg from "../assets/children.png";
 import { register } from "../apis/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import {
   FaUser,
@@ -24,12 +25,16 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
 
 const handleRegister = async () => {
-   navigate("/verify-email",{
-    state : {name,email,password,role}
-   });
+
+    if(name === "" || email === "" || password === "" || role === ""){
+        toast.error("Please fill in all fields");
+        return;
+    }
+  
   try {
     const payload = {
       name,
@@ -40,12 +45,23 @@ const handleRegister = async () => {
 
     const response = await register(payload);
 
-    toast.success(response.message);
+    if (response.message === "Email already registered") {
+        toast.error(response.message);
+        return;
+    }
+
+  
+
+    navigate("/verify-email", {
+      state: { name, email, password, role },
+    });
+      toast.success(response.message);
 
    
   } catch (error) {
     console.error(error);
-
+     console.log(error.response?.status);
+     console.log(error.response?.data);
     
     toast.error(error.response?.data?.message || "Registration failed");
   }
@@ -183,15 +199,22 @@ const handleRegister = async () => {
                   </span>
 
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="form-control"
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+
+                  <span
+                    className="input-group-text"
+                    role="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
                 </div>
               </div>
-
               {/* Role */}
               <div className="mb-4">
                 <label className="fw-semibold">Role</label>
@@ -225,7 +248,12 @@ const handleRegister = async () => {
               {/* Footer */}
               <p className="text-center mt-3 mb-0 small">
                 Already have an account?
-                <span className="text-success fw-bold ms-2">Login</span>
+                <Link
+                  to="/login"
+                  className="text-success fw-bold ms-2 text-decoration-none"
+                >
+                  Login
+                </Link>
               </p>
             </div>
           </div>

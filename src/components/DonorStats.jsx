@@ -6,41 +6,41 @@ import {
   FaHome
 } from "react-icons/fa";
 
-const DonorStats = () => {
-  const stats = [
-    {
-      id: 1,
-      icon: <FaRupeeSign />,
-      title: "Donations Made",
-      value: "₹ 15,300",
-      sub: "Total Value",
-      color: "#198754"
-    },
-    {
-      id: 2,
-      icon: <FaGift />,
-      title: "Needs Supported",
-      value: "18",
-      sub: "Items",
-      color: "#fd7e14"
-    },
-    {
-      id: 3,
-      icon: <FaCalendarAlt />,
-      title: "Visits Booked",
-      value: "5",
-      sub: "Upcoming",
-      color: "#0d6efd"
-    },
-    {
-      id: 4,
-      icon: <FaHome />,
-      title: "Orphanages Supported",
-      value: "4",
-      sub: "Orphanages",
-      color: "#20c997"
-    }
-  ];
+const DonorStats = ({donorStats}) => {
+ const stats = [
+   {
+     id: 1,
+     icon: <FaRupeeSign />,
+     title: "Donations Made",
+     value: `₹${donorStats?.totalDonationAmmount || 0}`,
+     sub: "Total Value",
+     color: "#198754",
+   },
+   {
+     id: 2,
+     icon: <FaGift />,
+     title: "Needs Supported",
+     value: donorStats?.needsSupported || 0,
+     sub: "Items",
+     color: "#fd7e14",
+   },
+   {
+     id: 3,
+     icon: <FaCalendarAlt />,
+     title: "Visits Booked",
+     value: donorStats?.totalVisits || 0,
+     sub: "Upcoming",
+     color: "#0d6efd",
+   },
+   {
+     id: 4,
+     icon: <FaHome />,
+     title: "Orphanages Supported",
+     value: donorStats?.orphanageSupported || 0,
+     sub: "Orphanages",
+     color: "#20c997",
+   },
+ ];
 
   return (
     <div className="row g-4 mb-4">
