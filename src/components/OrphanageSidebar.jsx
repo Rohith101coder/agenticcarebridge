@@ -37,12 +37,12 @@ const OrphanageSidebar = () => {
     {
       icon: <FaChild />,
       name: "Children",
-      path: "/orphanage/feature/children",
+      path: "/orphanage/childrens",
     },
     {
       icon: <FaEnvelope />,
       name: "Messages",
-      path: "/orphanage/feature/messages",
+      path: "/orphanage/messages",
     },
     {
       icon: <FaUser />,

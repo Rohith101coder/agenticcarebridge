@@ -25,6 +25,8 @@ import UpdateOrphanageProfile from "../pages/UpdateOrphanageProfile";
 import OrphanageNeedItemPage from "../pages/OrphanageNeedItemPage";
 import OrphanageDonationPage from "../pages/OrphanageDonationPage";
 import OrphanageSlotsPage from "../pages/OrphanageSlotsPage";
+import OrphanageChildrenPage from "../pages/OrphanageChildrenPage";
+import OrphanageMessagePage from "../pages/OrphanageMessagePage";
 
 const AppRoutes = () => {
   return (
@@ -38,10 +40,10 @@ const AppRoutes = () => {
         <Route path="/donor/profile" element={<DonorProfile />} />
         <Route path="/donor/create-profile" element={<CreateDonorProfile />} />
         <Route path="/orphanage/dashboard" element={<OrphanageDashboard />} />
-        <Route
+        {/* <Route
           path="/orphanage/feature/:feature"
           element={<OrphanageFeaturePage />}
-        />
+        /> */}
         <Route
           path="/orphanage/create-profile"
           element={<OrphanageCreateProfile />}
@@ -64,6 +66,8 @@ const AppRoutes = () => {
         <Route path = "/orphanage/need-items" element = {<OrphanageNeedItemPage/>}/>
         <Route path = "/orphanage/donations" element = {<OrphanageDonationPage/>}/>
         <Route path = "/orphanage/slots" element = {<OrphanageSlotsPage/>}/>
+        <Route path="/orphanage/childrens" element={<OrphanageChildrenPage/>}/>
+        <Route path="/orphanage/messages" element={<OrphanageMessagePage/>} />
       </Routes>
     </BrowserRouter>
   );
