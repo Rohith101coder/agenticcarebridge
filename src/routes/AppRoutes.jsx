@@ -27,6 +27,12 @@ import OrphanageDonationPage from "../pages/OrphanageDonationPage";
 import OrphanageSlotsPage from "../pages/OrphanageSlotsPage";
 import OrphanageChildrenPage from "../pages/OrphanageChildrenPage";
 import OrphanageMessagePage from "../pages/OrphanageMessagePage";
+import AboutUsPage from "../pages/AboutUs";
+import HowItWorks from "../components/HowItWorks";
+import HowItWorksPage from "../pages/HowItWorksPage";
+import ContactPage from "../pages/ContactPage";
+import ExploreNeeds from "../pages/ExploreNeeds";
+import SingleNeedPage from "../pages/SingleNeedPage";
 
 const AppRoutes = () => {
   return (
@@ -49,6 +55,7 @@ const AppRoutes = () => {
           element={<OrphanageCreateProfile />}
         />
         <Route path="/orphanage/verify-otp" element={<OrphanageVerifyOtp />} />
+        <Route path="/about" element={<AboutUsPage/>}/>
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/register" element={<Register />} />
@@ -68,6 +75,10 @@ const AppRoutes = () => {
         <Route path = "/orphanage/slots" element = {<OrphanageSlotsPage/>}/>
         <Route path="/orphanage/childrens" element={<OrphanageChildrenPage/>}/>
         <Route path="/orphanage/messages" element={<OrphanageMessagePage/>} />
+        <Route path="/howitworks" element={<HowItWorksPage/>}/>
+        <Route path="/contact" element={<ContactPage/>}/>
+        <Route path="/donor/explore-needs" element={<ExploreNeeds/>}/>
+        <Route path="/needs/:id" element={<SingleNeedPage/>}/>
       </Routes>
     </BrowserRouter>
   );
