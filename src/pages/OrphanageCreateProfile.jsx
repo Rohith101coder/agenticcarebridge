@@ -91,6 +91,7 @@ const OrphanageCreateProfile = () => {
                       value={formData.orphanageName}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. Little Angels Orphanage"
                       required
                     />
                   </div>
@@ -102,6 +103,7 @@ const OrphanageCreateProfile = () => {
                       value={formData.admin}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. John Doe"
                       required
                     />
                   </div>
@@ -113,6 +115,7 @@ const OrphanageCreateProfile = () => {
                       value={formData.district}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. Hyderabad"
                       required
                     />
                   </div>
@@ -123,6 +126,7 @@ const OrphanageCreateProfile = () => {
                       value={formData.state}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. Telangana"
                       required
                     />
                   </div>
@@ -133,6 +137,7 @@ const OrphanageCreateProfile = () => {
                       value={formData.country}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. India"
                       required
                     />
                   </div>
@@ -144,6 +149,7 @@ const OrphanageCreateProfile = () => {
                       value={formData.mandal}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. Shaikpet"
                     />
                   </div>
                   <div className="col-md-4">
@@ -153,6 +159,7 @@ const OrphanageCreateProfile = () => {
                       value={formData.village}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. Banjara Hills"
                     />
                   </div>
                   <div className="col-md-4">
@@ -164,6 +171,7 @@ const OrphanageCreateProfile = () => {
                       value={formData.numberOfChildren}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. 45"
                       required
                     />
                   </div>
@@ -176,22 +184,34 @@ const OrphanageCreateProfile = () => {
                       value={formData.orphanageEmail}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. contact@orphanage.org"
                       required
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Phone*</label>
+                    <label className="form-label">
+                      Phone*{" "}
+                      <span className="text-muted small">
+                        (Format: +91XXXXXXXXXX)
+                      </span>
+                    </label>
                     <input
                       name="orphanagePhone"
                       value={formData.orphanagePhone}
                       onChange={handleInputChange}
                       className="form-control"
+                      placeholder="e.g. +919876543210"
                       required
                     />
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label">Darpan ID*</label>
+                    <label className="form-label">
+                      Darpan ID*{" "}
+                      <span className="text-muted small">
+                        (e.g. MH/2018/0123456)
+                      </span>
+                    </label>
                     <input
                       name="darpanId"
                       value={formData.darpanId}
@@ -201,7 +221,12 @@ const OrphanageCreateProfile = () => {
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">PAN Number*</label>
+                    <label className="form-label">
+                      PAN Number*{" "}
+                      <span className="text-muted small">
+                        (e.g. ABCDE1234F)
+                      </span>
+                    </label>
                     <input
                       name="panNumber"
                       value={formData.panNumber}
@@ -212,7 +237,12 @@ const OrphanageCreateProfile = () => {
                   </div>
 
                   <div className="col-md-6">
-                    <label className="form-label">Website Link</label>
+                    <label className="form-label">
+                      Website Link{" "}
+                      <span className="text-muted small">
+                        (e.g. https://www.example.org)
+                      </span>
+                    </label>
                     <input
                       name="websiteLink"
                       value={formData.websiteLink}
@@ -221,7 +251,12 @@ const OrphanageCreateProfile = () => {
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label">Social Media Links</label>
+                    <label className="form-label">
+                      Social Media Links{" "}
+                      <span className="text-muted small">
+                        (e.g. https://instagram.com/handle)
+                      </span>
+                    </label>
                     <input
                       name="socialMediaLinks"
                       value={formData.socialMediaLinks}
