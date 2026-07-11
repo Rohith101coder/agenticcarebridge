@@ -54,9 +54,25 @@ const ChatWindow = ({ onClose }) => {
 
     setInput("");
     setLoading(true);
+    const history = messages
+      .slice(-6) // Last 6 messages (3 user + 3 bot)
+      .map((m) => `${m.sender === "user" ? "User" : "Assistant"}: ${m.text}`)
+      .join("\n");
+
+      const prompt = `
+Conversation History:
+
+${history}
+
+Current User Question:
+
+${message}
+
+Answer only the current question using the above conversation if relevant.
+`;
 
     try {
-      const answer = await askCareBot(message);
+      const answer = await askCareBot(prompt);
 
       const botMessage = {
         sender: "bot",
