@@ -8,7 +8,10 @@ import {
   FaExclamationTriangle,
   FaSpinner,
   FaCalendarCheck,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -18,7 +21,7 @@ import {
   getRejectedBookings,
   getNotVisitedBookings,
   getCompletedBookings,
-} from "../apis/donorSlotApis"; // Adjust path as needed
+} from "../apis/donorSlotApis";
 
 const DonorSlotPage = () => {
   const [activeTab, setActiveTab] = useState("pending");
@@ -34,9 +37,23 @@ const DonorSlotPage = () => {
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
 
+  // Sidebar visibility state: hidden by default
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+
   // Cancellation Confirmation Dialog State
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [slotToCancel, setSlotToCancel] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 992);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     fetchSlots();
@@ -89,10 +106,7 @@ const DonorSlotPage = () => {
 
     try {
       setActionLoading(slotToCancel);
-      // If you implement a cancel booking API call, place it here:
       // await cancelBooking(slotToCancel);
-
-      // Local state transition for demonstration or re-fetch
       fetchSlots();
       toast.success("Slot successfully cancelled!");
     } catch (err) {
@@ -108,8 +122,26 @@ const DonorSlotPage = () => {
   const currentList = slots[activeTab] || [];
 
   return (
-    <div className="d-flex min-h-screen bg-light">
-      <DonorSidebar />
+    <div className="d-flex min-h-screen bg-light position-relative">
+      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 z-3 bg-white"
+          style={{ height: "100vh" }}
+        >
+          <DonorSidebar />
+        </div>
+      )}
+
+      {/* Backdrop for overlay click when sidebar is open */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 z-2"
+          style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
+
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -118,13 +150,25 @@ const DonorSlotPage = () => {
 
       <div
         className="pb-5 w-100"
-        style={{ marginLeft: "250px", minHeight: "100vh" }}
+        style={{ marginLeft: isMobile ? "0px" : "250px", minHeight: "100vh" }}
       >
-        {/* Top Header */}
+        {/* Top Header with Hamburger / Three Lines Symbol */}
         <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
           <div className="container px-4 d-flex align-items-center justify-content-between">
+            <button
+              className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
+              style={{ width: "38px", height: "38px" }}
+              onClick={() => setShowSidebar(!showSidebar)}
+              title="Toggle Menu"
+            >
+              {showSidebar ? (
+                <FaTimes className="text-success" />
+              ) : (
+                <FaBars className="text-success" />
+              )}
+            </button>
             <h5 className="fw-bold mb-0 text-success">My Donation Slots</h5>
-            <div style={{ width: "60px" }}></div>
+            <div style={{ width: "38px" }}></div>
           </div>
         </div>
 

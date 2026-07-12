@@ -8,6 +8,8 @@ import {
   FaTrash,
   FaEdit,
   FaSpinner,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -32,6 +34,9 @@ const DonorDonationsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
+
+  // Sidebar visibility state: hidden by default
+  const [showSidebar, setShowSidebar] = useState(false);
 
   // Delete Confirmation Dialog State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -183,23 +188,50 @@ const DonorDonationsPage = () => {
   const currentList = donations[activeTab] || [];
 
   return (
-    <div className="d-flex min-h-screen bg-light">
-      <DonorSidebar />
+    <div className="d-flex min-h-screen bg-light position-relative">
+      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 z-3"
+          style={{ height: "100vh", backgroundColor: "white" }}
+        >
+          <DonorSidebar />
+        </div>
+      )}
+
+      {/* Backdrop for mobile/overlay click when sidebar is open */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 z-2"
+          style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
+
       <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
       />
 
-      <div
-        className="pb-5 w-100"
-        style={{ marginLeft: "250px", minHeight: "100vh" }}
-      >
-        {/* Top Header */}
+      <div className="pb-5 w-100" style={{ minHeight: "100vh" }}>
+        {/* Top Header with Hamburger / Three Lines Symbol */}
         <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
           <div className="container px-4 d-flex align-items-center justify-content-between">
+            <button
+              className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
+              style={{ width: "38px", height: "38px" }}
+              onClick={() => setShowSidebar(!showSidebar)}
+              title="Toggle Menu"
+            >
+              {showSidebar ? (
+                <FaTimes className="text-success" />
+              ) : (
+                <FaBars className="text-success" />
+              )}
+            </button>
             <h5 className="fw-bold mb-0 text-success">My Donations</h5>
-            <div style={{ width: "60px" }}></div>
+            <div style={{ width: "38px" }}></div>
           </div>
         </div>
 

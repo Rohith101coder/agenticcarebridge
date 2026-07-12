@@ -36,6 +36,9 @@ import SingleNeedPage from "../pages/SingleNeedPage";
 import UpdateDonorProfile from "../pages/UpdateDonorProfile";
 import DonorDonationsPage from "../pages/DonorDonationsPage";
 import DonorSlotPage from "../pages/DonorSlotPage";
+import MyVisitsPage from "../pages/MyVisitsPage";
+import DonorNotifications from "../pages/DonorNotifications";
+import DonorMessages from "../pages/DonorMessages";
 
 const AppRoutes = () => {
   return (
@@ -58,8 +61,14 @@ const AppRoutes = () => {
           element={<OrphanageCreateProfile />}
         />
 
-        <Route path="/donor/bookings" element={<DonorSlotPage/>}/>
-        <Route path="/donor/donations" element={<DonorDonationsPage/>}/>
+        <Route path="/donor/visits" element={<MyVisitsPage />} />
+
+        <Route path="/donor/notifications" element={<DonorNotifications />} />
+
+        <Route path="/donor/messages" element={<DonorMessages />} />
+
+        <Route path="/donor/bookings" element={<DonorSlotPage />} />
+        <Route path="/donor/donations" element={<DonorDonationsPage />} />
         <Route path="/orphanage/verify-otp" element={<OrphanageVerifyOtp />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
@@ -75,7 +84,7 @@ const AppRoutes = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-otp" element={<VerifyForgotEmail />} />
         <Route path="/orphanage/profile" element={<OrphanageProfilePage />} />
-        <Route path="/donor/update-profile" element={<UpdateDonorProfile/>}/>
+        <Route path="/donor/update-profile" element={<UpdateDonorProfile />} />
         <Route
           path="/orphanage/update-profile"
           element={<UpdateOrphanageProfile />}

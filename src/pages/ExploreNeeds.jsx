@@ -6,6 +6,8 @@ import {
   FaHeart,
   FaCheckCircle,
   FaCoins,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getAllNeeds } from "../apis/donorNeedApis";
@@ -18,7 +20,17 @@ const ExploreNeeds = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 992);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     loadNeeds();
@@ -68,13 +80,50 @@ const ExploreNeeds = () => {
   };
 
   return (
-    <div className="d-flex min-h-screen bg-light">
-      <DonorSidebar />
+    <div className="d-flex min-h-screen bg-light position-relative">
+      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 z-3 bg-white"
+          style={{ height: "100vh" }}
+        >
+          <DonorSidebar />
+        </div>
+      )}
+
+      {/* Backdrop for overlay click when sidebar is open */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 z-2"
+          style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
 
       <div
         className="pb-5 w-100"
-        style={{ marginLeft: "250px", minHeight: "100vh" }}
+        style={{ marginLeft: isMobile ? "0px" : "250px", minHeight: "100vh" }}
       >
+        {/* Top Header with Hamburger / Three Lines Symbol */}
+        <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
+          <div className="container px-4 d-flex align-items-center justify-content-between">
+            <button
+              className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
+              style={{ width: "38px", height: "38px" }}
+              onClick={() => setShowSidebar(!showSidebar)}
+              title="Toggle Menu"
+            >
+              {showSidebar ? (
+                <FaTimes className="text-success" />
+              ) : (
+                <FaBars className="text-success" />
+              )}
+            </button>
+            <h5 className="fw-bold mb-0 text-success">Explore Needs</h5>
+            <div style={{ width: "38px" }}></div>
+          </div>
+        </div>
+
         <div className="bg-success text-white py-4 mb-4 shadow-sm">
           <div className="container text-center">
             <h1 className="fw-bold fs-3 mb-1">Explore Children's Needs</h1>
@@ -169,13 +218,13 @@ const ExploreNeeds = () => {
 
                     {/* Card Content (E-commerce Style) */}
                     <div className="card-body p-1 d-flex flex-column flex-grow-1">
-                      <h7
+                      <h6
                         className="fw-bold text-dark mb-1 text-truncate"
                         style={{ fontSize: "0.82rem" }}
                         title={need.name}
                       >
                         {need.name}
-                      </h7>
+                      </h6>
 
                       <p
                         className="text-muted mb-1 text-truncate"

@@ -1,3 +1,4 @@
+// 6. ActionCards.jsx (Column stack adjustment on small viewports)
 import React from "react";
 import urgentImg from "../assets/banner1.png";
 import visitImg from "../assets/banner2.png";
@@ -10,7 +11,7 @@ const ActionCards = () => {
       desc: "Browse needs posted by orphanages and make a difference today.",
       btn: "Explore Needs",
       image: urgentImg,
-      bg: "#e8f8ef"
+      bg: "#e8f8ef",
     },
     {
       id: 2,
@@ -18,53 +19,46 @@ const ActionCards = () => {
       desc: "Celebrate birthdays, festivals, or spend quality time with children.",
       btn: "Book a Visit",
       image: visitImg,
-      bg: "#f8f5ff"
-    }
+      bg: "#f8f5ff",
+    },
   ];
 
   return (
     <section className="pb-5">
-      <div className="container">
+      <div className="container px-3 px-md-4">
         <div className="row g-4">
-
           {cards.map((card) => (
-            <div className="col-md-6" key={card.id}>
+            <div className="col-12 col-md-6" key={card.id}>
               <div
-                className="rounded-4 p-4 d-flex align-items-center justify-content-between shadow-sm"
+                className="rounded-4 p-3 p-md-4 d-flex flex-column flex-sm-row align-items-center justify-content-between shadow-sm gap-3 text-center text-sm-start"
                 style={{
-                  backgroundColor: card.bg
+                  backgroundColor: card.bg,
                 }}
               >
-                {/* Left content */}
+                {/* Content */}
                 <div>
-                  <h5 className="fw-bold">
-                    {card.title}
-                  </h5>
-
-                  <p className="text-muted small mb-3">
-                    {card.desc}
-                  </p>
-
+                  <h5 className="fw-bold fs-6 fs-md-5 mb-2">{card.title}</h5>
+                  <p className="text-muted small mb-3">{card.desc}</p>
                   <button className="btn btn-link text-success p-0 fw-semibold text-decoration-none">
                     {card.btn} →
                   </button>
                 </div>
 
-                {/* Right image */}
+                {/* Image */}
                 <img
                   src={card.image}
                   alt={card.title}
                   style={{
-                    width: "250px",
-                    height: "150px",
+                    width: "100%",
+                    maxWidth: "200px",
+                    height: "120px",
                     objectFit: "cover",
-                    borderRadius: "15px"
+                    borderRadius: "15px",
                   }}
                 />
               </div>
             </div>
           ))}
-
         </div>
       </div>
     </section>

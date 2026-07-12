@@ -84,26 +84,26 @@ const DonorSidebar = () => {
         const isActive = location.pathname === path;
 
         // Special handling for Logout if it triggers a function instead of route
-        if (item.name === "Logout") {
-          return (
-            <button
-              key={index}
-              onClick={() => {
-                /* Add your logout logic here e.g., handleLogout() */
-              }}
-              className={`w-100 border-0 text-start d-flex align-items-center gap-3 p-3 rounded mb-2 text-decoration-none ${
-                isActive ? "bg-success text-white" : "text-dark bg-white"
-              }`}
-              style={{
-                cursor: "pointer",
-                transition: "0.3s",
-              }}
-            >
-              <span className="fs-5">{item.icon}</span>
-              <span>{item.name}</span>
-            </button>
-          );
-        }
+        // if (item.name === "Logout") {
+        //   return (
+        //     <button
+        //       key={index}
+        //       onClick={() => {
+        //         /* Add your logout logic here e.g., handleLogout() */
+        //       }}
+        //       className={`w-100 border-0 text-start d-flex align-items-center gap-3 p-3 rounded mb-2 text-decoration-none ${
+        //         isActive ? "bg-success text-white" : "text-dark bg-white"
+        //       }`}
+        //       style={{
+        //         cursor: "pointer",
+        //         transition: "0.3s",
+        //       }}
+        //     >
+        //       <span className="fs-5">{item.icon}</span>
+        //       <span>{item.name}</span>
+        //     </button>
+        //   );
+        // }
 
         return (
           <Link

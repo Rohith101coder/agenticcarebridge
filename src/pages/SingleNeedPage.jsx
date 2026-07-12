@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   FaArrowLeft,
   FaCoins,
   FaCheckCircle,
   FaExclamationCircle,
-  FaBoxes,
   FaTag,
   FaBuilding,
   FaHeart,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import DonorSidebar from "../components/DonorSidebar";
 import { getCategoryIcon } from "../utils/categoryIcons";
@@ -18,7 +19,17 @@ const SingleNeedPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
   const need = location.state?.need;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 992);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const getPriorityBadge = (priority) => {
     switch (priority) {
@@ -35,8 +46,10 @@ const SingleNeedPage = () => {
 
   if (!need) {
     return (
-      <div className="d-flex min-h-screen bg-light align-items-center justify-content-center w-100 flex-column">
-        <h5 className="fw-bold text-muted mb-3">No Need Data Provided</h5>
+      <div className="d-flex min-h-screen bg-light align-items-center justify-content-center w-100 flex-column p-3">
+        <h5 className="fw-bold text-muted mb-3 text-center">
+          No Need Data Provided
+        </h5>
         <button onClick={() => navigate(-1)} className="btn btn-success btn-sm">
           <FaArrowLeft className="me-1" /> Go Back
         </button>
@@ -45,24 +58,52 @@ const SingleNeedPage = () => {
   }
 
   return (
-    <div className="d-flex min-h-screen bg-light">
-      <DonorSidebar />
+    <div className="d-flex min-h-screen bg-light position-relative">
+      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 z-3 bg-white"
+          style={{ height: "100vh" }}
+        >
+          <DonorSidebar />
+        </div>
+      )}
+
+      {/* Backdrop for overlay click when sidebar is open */}
+      {showSidebar && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 z-2"
+          style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
 
       <div
         className="pb-5 w-100"
-        style={{ marginLeft: "250px", minHeight: "100vh" }}
+        style={{ marginLeft: isMobile ? "0px" : "250px", minHeight: "100vh" }}
       >
-        {/* Top Header */}
+        {/* Top Header with Hamburger / Three Lines Symbol */}
         <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
           <div className="container px-4 d-flex align-items-center justify-content-between">
+            <button
+              className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
+              style={{ width: "38px", height: "38px" }}
+              onClick={() => setShowSidebar(!showSidebar)}
+              title="Toggle Menu"
+            >
+              {showSidebar ? (
+                <FaTimes className="text-success" />
+              ) : (
+                <FaBars className="text-success" />
+              )}
+            </button>
+            <h5 className="fw-bold mb-0 text-success">Need Details</h5>
             <button
               onClick={() => navigate(-1)}
               className="btn btn-outline-success btn-sm d-flex align-items-center gap-1"
             >
               <FaArrowLeft /> Back
             </button>
-            <h5 className="fw-bold mb-0 text-success">Need Details</h5>
-            <div style={{ width: "60px" }}></div>
           </div>
         </div>
 
@@ -125,7 +166,9 @@ const SingleNeedPage = () => {
                         Required
                       </span>
                       <span className="fw-bold text-dark small">
-                        {Number(need.quantity) - Number(need.fulfilledQuantity) - Number(need.reservedQuantity)}
+                        {Number(need.quantity) -
+                          Number(need.fulfilledQuantity) -
+                          Number(need.reservedQuantity)}
                       </span>
                     </div>
                   </div>

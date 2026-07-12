@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaBell, FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import profileImg from "../assets/profile.jpg";
+import { Link } from "react-router-dom";
 
 const DonorHeader = ({
   isMobile,
@@ -63,7 +64,9 @@ const DonorHeader = ({
       <div className="d-flex align-items-center gap-3">
         {/* Notifications */}
         <div className="position-relative">
-          <FaBell size={22} style={{ cursor: "pointer" }} />
+          <Link to="/donor/notifications" className="text-dark">
+            <FaBell size={22} style={{ cursor: "pointer" }} />
+          </Link>
 
           <span
             className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
