@@ -4,7 +4,6 @@ import {
   FaMapMarkerAlt,
   FaFilter,
   FaHeart,
-  FaExclamationCircle,
   FaCheckCircle,
   FaCoins,
 } from "react-icons/fa";
@@ -38,10 +37,8 @@ const ExploreNeeds = () => {
     }
   };
 
-  // Extract unique categories for filters dynamically
   const categories = ["All", ...new Set(needs.map((need) => need.category))];
 
-  // Filter logic based on entity properties
   const filteredNeeds = needs.filter((need) => {
     const matchesSearch = need.name
       ?.toLowerCase()
@@ -66,26 +63,22 @@ const ExploreNeeds = () => {
     }
   };
 
-  // Function to handle navigating to the single need page
   const handleViewDetails = (need) => {
     navigate(`/needs/${need.needItemId}`, { state: { need } });
   };
 
   return (
     <div className="d-flex min-h-screen bg-light">
-      {/* Sidebar fixed to the left */}
       <DonorSidebar />
 
-      {/* Main Content adjusted with left margin to accommodate the 250px sidebar */}
       <div
         className="pb-5 w-100"
         style={{ marginLeft: "250px", minHeight: "100vh" }}
       >
-        {/* Hero Banner */}
-        <div className="bg-success text-white py-5 mb-4 shadow-sm">
+        <div className="bg-success text-white py-4 mb-4 shadow-sm">
           <div className="container text-center">
-            <h1 className="fw-bold display-5 mb-2">Explore Children's Needs</h1>
-            <p className="fs-5 text-white-75 mb-0">
+            <h1 className="fw-bold fs-3 mb-1">Explore Children's Needs</h1>
+            <p className="small text-white-75 mb-0">
               Discover immediate requirements from orphanages and bring smiles
               to children's lives.
             </p>
@@ -93,12 +86,10 @@ const ExploreNeeds = () => {
         </div>
 
         <div className="container px-4">
-          {/* Search and Filter Section */}
           <div className="card border-0 shadow-sm rounded-4 p-3 mb-4">
             <div className="row g-2 align-items-center justify-content-between">
-              {/* Search Bar */}
               <div className="col-md-8">
-                <div className="input-group">
+                <div className="input-group input-group-sm">
                   <span className="input-group-text bg-white border-end-0">
                     <FaSearch className="text-muted" />
                   </span>
@@ -112,9 +103,8 @@ const ExploreNeeds = () => {
                 </div>
               </div>
 
-              {/* Category Filter */}
               <div className="col-md-4">
-                <div className="input-group">
+                <div className="input-group input-group-sm">
                   <span className="input-group-text bg-white">
                     <FaFilter className="text-muted" />
                   </span>
@@ -134,7 +124,6 @@ const ExploreNeeds = () => {
             </div>
           </div>
 
-          {/* Needs Grid */}
           {loading ? (
             <div className="text-center py-5">
               <div className="spinner-border text-success" role="status">
@@ -143,96 +132,91 @@ const ExploreNeeds = () => {
             </div>
           ) : filteredNeeds.length === 0 ? (
             <div className="text-center py-5 text-muted">
-              <h3 className="fw-semibold">No needs found</h3>
-              <p>Try adjusting your search or filters.</p>
+              <h5 className="fw-semibold">No needs found</h5>
+              <p className="small">Try adjusting your search or filters.</p>
             </div>
           ) : (
-            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 g-2">
               {filteredNeeds.map((need) => (
                 <div className="col" key={need.needItemId || need.id}>
-                  <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden position-relative">
-                    {/* Category & Priority Badges */}
-                    <div className="position-absolute top-0 end-0 m-2 d-flex flex-column align-items-end gap-1 z-2">
-                      <span className="badge bg-success">{need.category}</span>
+                  <div className="card h-100 border-0 shadow-xs rounded-3 overflow-hidden position-relative bg-white p-2 d-flex flex-column hover-shadow transition-all">
+                    {/* Compact Badges Corner */}
+                    <div className="position-absolute top-0 start-0 m-1 d-flex flex-column gap-1 z-2">
                       <span
-                        className={`badge ${getPriorityBadge(need.priority)}`}
+                        className={`badge x-x-small py-0.5 px-1 ${getPriorityBadge(need.priority)}`}
+                        style={{ fontSize: "0.6rem" }}
                       >
-                        {need.priority} Priority
+                        {need.priority}
                       </span>
                     </div>
 
-                    {/* Need Image / Icon */}
-                    <img
-                      src={getCategoryIcon(need.category)}
-                      alt={need.name}
-                      className="card-img-top object-fit-cover bg-light"
-                      style={{ height: "140px" }}
-                    />
+                    <span
+                      className="badge bg-success position-absolute top-0 end-0 m-1 x-x-small py-0.5 px-1 z-2"
+                      style={{ fontSize: "0.6rem" }}
+                    >
+                      {need.category}
+                    </span>
 
-                    <div className="card-body d-flex flex-column p-3">
-                      <h6 className="fw-bold text-dark mb-1 text-truncate pe-5">
+                    {/* Thumbnail Image */}
+                    <div className="text-center bg-light rounded-2 py-2 mb-2 mt-3">
+                      <img
+                        src={getCategoryIcon(need.category)}
+                        alt={need.name}
+                        className="object-fit-contain"
+                        style={{ height: "90px", width: "100%" }}
+                      />
+                    </div>
+
+                    {/* Card Content (E-commerce Style) */}
+                    <div className="card-body p-1 d-flex flex-column flex-grow-1">
+                      <h7
+                        className="fw-bold text-dark mb-1 text-truncate"
+                        style={{ fontSize: "0.82rem" }}
+                        title={need.name}
+                      >
                         {need.name}
-                      </h6>
-
-                      {/* Orphanage CareBridge ID */}
-                      <p className="text-muted x-small mb-2 d-flex align-items-center gap-1 text-truncate">
-                        <FaMapMarkerAlt className="text-success flex-shrink-0" />
-                        <span className="text-truncate">
-                          CareBridge ID: {need.orphanageCareBridgeId}
-                        </span>
-                      </p>
+                      </h7>
 
                       <p
-                        className="text-secondary small flex-grow-1 mb-2"
-                        style={{ fontSize: "0.85rem" }}
+                        className="text-muted mb-1 text-truncate"
+                        style={{ fontSize: "0.68rem" }}
                       >
-                        {need.description?.length > 70
-                          ? `${need.description.substring(0, 70)}...`
-                          : need.description}
+                        <FaMapMarkerAlt className="text-success me-0.5" /> ID:{" "}
+                        {need.orphanageCareBridgeId}
                       </p>
 
-                      {/* Quantity details */}
-                      <div className="bg-light p-2 rounded-3 x-small mb-2 d-flex justify-content-between">
-                        <div>
-                          <span className="text-muted d-block">Total Qty:</span>
-                          <span className="fw-semibold text-dark">
-                            {need.quantity}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-muted d-block text-success d-flex align-items-center gap-1">
-                            <FaCheckCircle /> Fulfilled:
-                          </span>
-                          <span className="fw-semibold text-dark">
-                            {need.fulfilledQuantity}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-muted d-block text-warning d-flex align-items-center gap-1">
-                            <FaExclamationCircle /> Reserved:
-                          </span>
-                          <span className="fw-semibold text-dark">
-                            {need.reservedQuantity}
-                          </span>
-                        </div>
+                      <div
+                        className="text-dark fw-bold mb-1"
+                        style={{ fontSize: "0.85rem" }}
+                      >
+                        ₹{need.pricePerQuantity}{" "}
+                        <span
+                          className="text-muted fw-normal x-small"
+                          style={{ fontSize: "0.65rem" }}
+                        >
+                          / unit
+                        </span>
                       </div>
 
-                      {/* Financial info */}
-                      <div className="d-flex align-items-center justify-content-between bg-white border border-success-subtle p-2 rounded-3 mb-2 x-small text-success">
-                        <span className="d-flex align-items-center gap-1">
-                          <FaCoins /> Price/Unit:
-                        </span>
-                        <span className="fw-bold text-dark">
-                          ₹{need.pricePerQuantity}
+                      {/* Mini Qty Bar */}
+                      <div
+                        className="bg-light px-1 py-1 rounded-1 x-small mb-2 d-flex justify-content-between text-muted"
+                        style={{ fontSize: "0.65rem" }}
+                      >
+                        <span>Req: {need.quantity}</span>
+                        <span className="text-success">
+                          <FaCheckCircle className="me-0.5" />
+                          {need.fulfilledQuantity}
                         </span>
                       </div>
 
                       {/* Action Button */}
                       <button
                         onClick={() => handleViewDetails(need)}
-                        className="btn btn-outline-success btn-sm w-100 fw-semibold d-flex align-items-center justify-content-center gap-2 py-2 border-0"
+                        className="btn btn-outline-success x-small w-100 fw-semibold d-flex align-items-center justify-content-center gap-1 mt-auto py-1"
+                        style={{ fontSize: "0.72rem" }}
                       >
-                        <FaHeart className="text-danger" /> Fulfill Need
+                        <FaHeart className="text-danger x-small" /> Fulfill
                       </button>
                     </div>
                   </div>

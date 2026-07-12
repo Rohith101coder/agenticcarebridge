@@ -33,3 +33,38 @@ export const createDonorProfile = async (data) => {
 
   return response.data;
 };
+
+export const getDonorProfile = async () => {
+  const response = await api.get("/donor/profile", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const updateDonorProfile = async (data) => {
+  const formData = new FormData();
+
+  Object.entries(data).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
+      formData.append(key, value);
+    }
+  });
+
+  const response = await api.put("/donor/update-profile", formData, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+    transformRequest: [
+      (data, headers) => {
+        delete headers["Content-Type"];
+        return data;
+      },
+    ],
+  });
+
+  return response.data;
+};
+

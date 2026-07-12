@@ -33,6 +33,9 @@ import HowItWorksPage from "../pages/HowItWorksPage";
 import ContactPage from "../pages/ContactPage";
 import ExploreNeeds from "../pages/ExploreNeeds";
 import SingleNeedPage from "../pages/SingleNeedPage";
+import UpdateDonorProfile from "../pages/UpdateDonorProfile";
+import DonorDonationsPage from "../pages/DonorDonationsPage";
+import DonorSlotPage from "../pages/DonorSlotPage";
 
 const AppRoutes = () => {
   return (
@@ -54,8 +57,11 @@ const AppRoutes = () => {
           path="/orphanage/create-profile"
           element={<OrphanageCreateProfile />}
         />
+
+        <Route path="/donor/bookings" element={<DonorSlotPage/>}/>
+        <Route path="/donor/donations" element={<DonorDonationsPage/>}/>
         <Route path="/orphanage/verify-otp" element={<OrphanageVerifyOtp />} />
-        <Route path="/about" element={<AboutUsPage/>}/>
+        <Route path="/about" element={<AboutUsPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/register" element={<Register />} />
@@ -69,16 +75,30 @@ const AppRoutes = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-otp" element={<VerifyForgotEmail />} />
         <Route path="/orphanage/profile" element={<OrphanageProfilePage />} />
-        <Route path="/orphanage/update-profile" element={<UpdateOrphanageProfile/>} />
-        <Route path = "/orphanage/need-items" element = {<OrphanageNeedItemPage/>}/>
-        <Route path = "/orphanage/donations" element = {<OrphanageDonationPage/>}/>
-        <Route path = "/orphanage/slots" element = {<OrphanageSlotsPage/>}/>
-        <Route path="/orphanage/childrens" element={<OrphanageChildrenPage/>}/>
-        <Route path="/orphanage/messages" element={<OrphanageMessagePage/>} />
-        <Route path="/howitworks" element={<HowItWorksPage/>}/>
-        <Route path="/contact" element={<ContactPage/>}/>
-        <Route path="/donor/explore-needs" element={<ExploreNeeds/>}/>
-        <Route path="/needs/:id" element={<SingleNeedPage/>}/>
+        <Route path="/donor/update-profile" element={<UpdateDonorProfile/>}/>
+        <Route
+          path="/orphanage/update-profile"
+          element={<UpdateOrphanageProfile />}
+        />
+        <Route
+          path="/orphanage/need-items"
+          element={<OrphanageNeedItemPage />}
+        />
+        <Route
+          path="/orphanage/donations"
+          element={<OrphanageDonationPage />}
+        />
+        <Route path="/orphanage/slots" element={<OrphanageSlotsPage />} />
+        <Route
+          path="/orphanage/childrens"
+          element={<OrphanageChildrenPage />}
+        />
+        <Route path="/orphanage/messages" element={<OrphanageMessagePage />} />
+        <Route path="/howitworks" element={<HowItWorksPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/donor/explore-needs" element={<ExploreNeeds />} />
+        <Route path="/needs/:id" element={<SingleNeedPage />} />
+        {/* <Route path="/donor/profile" element={<DonorProfile />} /> */}
       </Routes>
     </BrowserRouter>
   );

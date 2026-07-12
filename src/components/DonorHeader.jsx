@@ -29,10 +29,18 @@ const DonorHeader = ({
     localStorage.setItem("profileHintSeen", "true");
   };
 
+  // const handleProfileClick = () => {
+  //   if (profileStatus === "NO_PROFILE") {
+  //     navigate("/donor/create-profile");
+  //   } else if (profileStatus === "NOT_VERIFIED") {
+  //     navigate("/donor/profile");
+  //   }
+  // };
+
   const handleProfileClick = () => {
     if (profileStatus === "NO_PROFILE") {
       navigate("/donor/create-profile");
-    } else if (profileStatus === "NOT_VERIFIED") {
+    } else {
       navigate("/donor/profile");
     }
   };
