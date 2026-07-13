@@ -63,11 +63,11 @@ const OrphanageSidebar = () => {
         width: "250px",
         height: "100vh",
         overflowY: "auto",
+        overflowX: "hidden",
       }}
     >
       <div className="d-flex align-items-center gap-2 mb-4">
         <img src={logo} alt="logo" width="45" />
-
         <h4 className="fw-bold mb-0">CareBridge</h4>
       </div>
 

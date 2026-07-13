@@ -11,6 +11,8 @@ import {
   FaCheckCircle,
   FaCalendarAlt,
   FaMapMarkerAlt,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 
 const DonorProfile = () => {
@@ -19,6 +21,7 @@ const DonorProfile = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [imageTitle, setImageTitle] = useState("");
+  const [showSidebar, setShowSidebar] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   const navigate = useNavigate();
@@ -85,19 +88,51 @@ const DonorProfile = () => {
   }
 
   return (
-    <div className="d-flex min-h-screen bg-light">
-      {/* Sidebar hidden or handled on small screens, fixed on desktop */}
-      {!isMobile && <DonorSidebar />}
+    <div className="d-flex min-h-screen bg-light position-relative">
+      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
+      {showSidebar && (
+        <div 
+          className="position-fixed top-0 start-0 z-3 bg-white"
+          style={{ height: "100vh" }}
+        >
+          <DonorSidebar />
+        </div>
+      )}
+
+      {/* Backdrop for overlay click when sidebar is open */}
+      {showSidebar && (
+        <div 
+          className="position-fixed top-0 start-0 w-100 h-100 z-2"
+          style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
 
       {/* Main Content: Responsive margin-left to prevent overlap on mobile */}
       <div
-        className="flex-grow-1 p-3 p-md-4 pb-5 w-100"
+        className="flex-grow-1 pb-5 w-100"
         style={{
           marginLeft: isMobile ? "0px" : "250px",
           minHeight: "100vh",
         }}
       >
-        <div className="container px-2 px-md-3" style={{ maxWidth: "1000px" }}>
+        {/* Top Header with Hamburger / Three Lines Symbol */}
+        <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
+          <div className="container px-4 d-flex align-items-center justify-content-between">
+            <button
+              className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
+              style={{ width: "38px", height: "38px" }}
+              onClick={() => setShowSidebar(!showSidebar)}
+              title="Toggle Menu"
+            >
+              {showSidebar ? <FaTimes className="text-success" /> : <FaBars className="text-success" />}
+            </button>
+            <h5 className="fw-bold mb-0 text-success">Donor Profile</h5>
+            <div style={{ width: "38px" }}></div>
+          </div>
+        </div>
+
+        <div className="container px-4" style={{ maxWidth: "1000px" }}>
           {/* Header */}
           <div className="bg-white shadow-sm rounded-4 p-3 p-md-4 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
             <div className="d-flex align-items-center">
@@ -134,8 +169,8 @@ const DonorProfile = () => {
                   donor?.donorStatus === "VERIFIED"
                     ? "bg-success"
                     : donor?.donorStatus === "NOT_VERIFIED"
-                      ? "bg-warning text-dark"
-                      : "bg-danger"
+                    ? "bg-warning text-dark"
+                    : "bg-danger"
                 }`}
               >
                 {donor?.donorStatus}
