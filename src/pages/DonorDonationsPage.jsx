@@ -10,6 +10,7 @@ import {
   FaSpinner,
   FaBars,
   FaTimes,
+  FaSearchPlus,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -35,8 +36,9 @@ const DonorDonationsPage = () => {
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
 
-  // Sidebar visibility state: hidden by default
+  // Responsive mobile states for persistent desktop and toggleable mobile sidebar
   const [showSidebar, setShowSidebar] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
   // Delete Confirmation Dialog State
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -59,6 +61,24 @@ const DonorDonationsPage = () => {
   const [modalError, setModalError] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setShowSidebar(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setShowSidebar(!showSidebar);
+    }
+  };
 
   useEffect(() => {
     fetchDonations();
@@ -188,19 +208,22 @@ const DonorDonationsPage = () => {
   const currentList = donations[activeTab] || [];
 
   return (
-    <div className="d-flex min-h-screen bg-light position-relative">
-      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
-      {showSidebar && (
+    <div
+      className="d-flex min-h-screen bg-light position-relative"
+      style={{ overflowX: "hidden", width: "100%", maxWidth: "100%" }}
+    >
+      {/* Permanent Sidebar on Desktop / Conditional Overlay on Mobile */}
+      {(!isMobile || showSidebar) && (
         <div
-          className="position-fixed top-0 start-0 z-3"
-          style={{ height: "100vh", backgroundColor: "white" }}
+          className="position-fixed top-0 start-0 z-3 bg-white shadow-sm"
+          style={{ height: "100vh", width: "250px" }}
         >
           <DonorSidebar />
         </div>
       )}
 
-      {/* Backdrop for mobile/overlay click when sidebar is open */}
-      {showSidebar && (
+      {/* Backdrop for mobile overlay when sidebar is toggled open */}
+      {isMobile && showSidebar && (
         <div
           className="position-fixed top-0 start-0 w-100 h-100 z-2"
           style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
@@ -214,14 +237,21 @@ const DonorDonationsPage = () => {
         hideProgressBar={false}
       />
 
-      <div className="pb-5 w-100" style={{ minHeight: "100vh" }}>
+      <div
+        className="flex-grow-1 bg-light pb-5 w-100"
+        style={{
+          marginLeft: isMobile ? "0px" : "250px",
+          minHeight: "100vh",
+          overflowX: "hidden",
+        }}
+      >
         {/* Top Header with Hamburger / Three Lines Symbol */}
         <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
           <div className="container px-4 d-flex align-items-center justify-content-between">
             <button
               className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
               style={{ width: "38px", height: "38px" }}
-              onClick={() => setShowSidebar(!showSidebar)}
+              onClick={toggleSidebar}
               title="Toggle Menu"
             >
               {showSidebar ? (
@@ -235,13 +265,13 @@ const DonorDonationsPage = () => {
           </div>
         </div>
 
-        <div className="container px-4" style={{ maxWidth: "900px" }}>
+        <div className="container px-3 px-md-4" style={{ maxWidth: "900px" }}>
           {/* Navigation Tabs */}
           <div className="d-flex gap-2 border-bottom pb-3 mb-4 overflow-auto">
             {["pending", "completed", "delivered", "cancelled"].map((tab) => (
               <button
                 key={tab}
-                className={`btn btn-sm d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-pill ${
+                className={`btn btn-sm d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-pill text-nowrap ${
                   activeTab === tab ? "btn-success" : "btn-light text-dark"
                 }`}
                 onClick={() => setActiveTab(tab)}
@@ -283,7 +313,7 @@ const DonorDonationsPage = () => {
                     key={item.donationId}
                     className="card border-0 shadow-xs rounded-3 p-3 bg-white"
                   >
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
                       <div>
                         <span className="badge bg-success x-small mb-1">
                           {item.donationType}
@@ -399,7 +429,7 @@ const DonorDonationsPage = () => {
           style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
         >
           <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content border-0 shadow-lg rounded-4">
+            <div className="modal-content border-0 shadow-lg rounded-4 p-3">
               <div className="modal-header border-0 pb-0">
                 <h5 className="modal-title fw-bold text-success">
                   Edit Pending Donation
@@ -411,7 +441,7 @@ const DonorDonationsPage = () => {
                 ></button>
               </div>
               <form onSubmit={handleUpdateSubmit}>
-                <div className="modal-body">
+                <div className="modal-body small">
                   {modalError && (
                     <div className="alert alert-danger py-2 mb-3">
                       {modalError}

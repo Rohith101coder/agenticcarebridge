@@ -16,26 +16,39 @@ const MyVisitsPage = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 992);
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setShowSidebar(false);
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setShowSidebar(!showSidebar);
+    }
+  };
+
   return (
-    <div className="d-flex min-h-screen bg-light position-relative">
-      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
-      {showSidebar && (
+    <div
+      className="d-flex min-h-screen bg-light position-relative"
+      style={{ overflowX: "hidden", width: "100%", maxWidth: "100%" }}
+    >
+      {/* Permanent Sidebar on Desktop / Conditional Overlay on Mobile */}
+      {(!isMobile || showSidebar) && (
         <div
-          className="position-fixed top-0 start-0 z-3 bg-white"
-          style={{ height: "100vh" }}
+          className="position-fixed top-0 start-0 z-3 bg-white shadow-sm"
+          style={{ height: "100vh", width: "250px" }}
         >
           <DonorSidebar />
         </div>
       )}
 
-      {/* Backdrop for overlay click when sidebar is open */}
-      {showSidebar && (
+      {/* Backdrop for mobile overlay when sidebar is toggled open */}
+      {isMobile && showSidebar && (
         <div
           className="position-fixed top-0 start-0 w-100 h-100 z-2"
           style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
@@ -44,8 +57,12 @@ const MyVisitsPage = () => {
       )}
 
       <div
-        className="pb-5 w-100"
-        style={{ marginLeft: isMobile ? "0px" : "250px", minHeight: "100vh" }}
+        className="flex-grow-1 bg-light pb-5 w-100"
+        style={{
+          marginLeft: isMobile ? "0px" : "250px",
+          minHeight: "100vh",
+          overflowX: "hidden",
+        }}
       >
         {/* Top Header with Hamburger / Three Lines Symbol */}
         <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
@@ -53,7 +70,7 @@ const MyVisitsPage = () => {
             <button
               className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
               style={{ width: "38px", height: "38px" }}
-              onClick={() => setShowSidebar(!showSidebar)}
+              onClick={toggleSidebar}
               title="Toggle Menu"
             >
               {showSidebar ? (
@@ -69,18 +86,18 @@ const MyVisitsPage = () => {
 
         {/* Feature Coming Soon Container */}
         <div
-          className="container px-4 d-flex align-items-center justify-content-center"
+          className="container px-3 px-md-4 d-flex align-items-center justify-content-center"
           style={{ minHeight: "75vh" }}
         >
           <div
-            className="card border-0 shadow-sm rounded-4 text-center p-5 bg-white"
+            className="card border-0 shadow-sm rounded-4 text-center p-4 p-md-5 bg-white"
             style={{ maxWidth: "600px", width: "100%" }}
           >
             <div className="bg-success bg-opacity-10 p-4 rounded-circle d-inline-flex mx-auto mb-4 text-success">
               <FaHandsHelping className="fs-1" />
             </div>
 
-            <h3 className="fw-bold text-dark mb-2">
+            <h3 className="fw-bold text-dark mb-2 fs-4">
               Visits Feature Coming Soon!
             </h3>
 

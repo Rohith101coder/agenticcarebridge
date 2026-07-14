@@ -13,6 +13,7 @@ import {
   FaMapMarkerAlt,
   FaBars,
   FaTimes,
+  FaBan,
 } from "react-icons/fa";
 
 const DonorProfile = () => {
@@ -28,11 +29,21 @@ const DonorProfile = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 992);
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setShowSidebar(false);
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setShowSidebar(!showSidebar);
+    }
+  };
 
   useEffect(() => {
     loadProfile();
@@ -62,6 +73,7 @@ const DonorProfile = () => {
   const handleEditProfile = () => {
     navigate("/donor/update-profile", {
       state: {
+        name: donor?.name,
         designation: donor?.designation,
         houseNum: donor?.houseNum,
         village: donor?.village,
@@ -88,20 +100,23 @@ const DonorProfile = () => {
   }
 
   return (
-    <div className="d-flex min-h-screen bg-light position-relative">
-      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
-      {showSidebar && (
-        <div 
-          className="position-fixed top-0 start-0 z-3 bg-white"
-          style={{ height: "100vh" }}
+    <div
+      className="d-flex min-h-screen bg-light position-relative"
+      style={{ overflowX: "hidden", width: "100%", maxWidth: "100%" }}
+    >
+      {/* Permanent Sidebar on Desktop / Conditional Overlay on Mobile */}
+      {(!isMobile || showSidebar) && (
+        <div
+          className="position-fixed top-0 start-0 z-3 bg-white shadow-sm"
+          style={{ height: "100vh", width: "250px" }}
         >
           <DonorSidebar />
         </div>
       )}
 
-      {/* Backdrop for overlay click when sidebar is open */}
-      {showSidebar && (
-        <div 
+      {/* Backdrop for mobile overlay when sidebar is toggled open */}
+      {isMobile && showSidebar && (
+        <div
           className="position-fixed top-0 start-0 w-100 h-100 z-2"
           style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
           onClick={() => setShowSidebar(false)}
@@ -114,6 +129,7 @@ const DonorProfile = () => {
         style={{
           marginLeft: isMobile ? "0px" : "250px",
           minHeight: "100vh",
+          overflowX: "hidden",
         }}
       >
         {/* Top Header with Hamburger / Three Lines Symbol */}
@@ -122,7 +138,7 @@ const DonorProfile = () => {
             <button
               className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
               style={{ width: "38px", height: "38px" }}
-              onClick={() => setShowSidebar(!showSidebar)}
+              onClick={toggleSidebar}
               title="Toggle Menu"
             >
               {showSidebar ? <FaTimes className="text-success" /> : <FaBars className="text-success" />}
@@ -132,7 +148,7 @@ const DonorProfile = () => {
           </div>
         </div>
 
-        <div className="container px-4" style={{ maxWidth: "1000px" }}>
+        <div className="container px-3 px-md-4" style={{ maxWidth: "1000px" }}>
           {/* Header */}
           <div className="bg-white shadow-sm rounded-4 p-3 p-md-4 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
             <div className="d-flex align-items-center">
@@ -145,6 +161,7 @@ const DonorProfile = () => {
                   height: "75px",
                   objectFit: "cover",
                   cursor: "pointer",
+                  flexShrink: 0,
                 }}
                 onClick={() => {
                   setSelectedImage(donor?.profilePic || profileImg);
@@ -163,9 +180,9 @@ const DonorProfile = () => {
               </div>
             </div>
 
-            <div className="text-start text-md-end w-100 w-md-auto d-flex flex-md-column justify-content-between align-items-center align-items-md-end">
+            <div className="text-start text-md-end w-100 w-md-auto d-flex flex-md-column justify-content-between align-items-center align-items-md-end gap-2">
               <span
-                className={`badge px-3 py-2 mb-md-2 ${
+                className={`badge px-3 py-2 ${
                   donor?.donorStatus === "VERIFIED"
                     ? "bg-success"
                     : donor?.donorStatus === "NOT_VERIFIED"
@@ -186,7 +203,7 @@ const DonorProfile = () => {
 
           <div className="row g-4">
             {/* Left Column */}
-            <div className="col-md-7">
+            <div className="col-12 col-md-7">
               <div className="bg-white shadow-sm rounded-4 p-4 h-100">
                 <h5 className="fw-bold text-success mb-3 fs-6">
                   <FaUser className="me-2" />
@@ -240,7 +257,7 @@ const DonorProfile = () => {
             </div>
 
             {/* Right Column */}
-            <div className="col-md-5">
+            <div className="col-12 col-md-5">
               <div className="bg-white shadow-sm rounded-4 p-4 h-100">
                 <h5 className="fw-bold text-success mb-3 fs-6">
                   <FaIdCard className="me-2" />
@@ -328,40 +345,39 @@ const DonorProfile = () => {
         </div>
       </div>
 
-      {/* Profile Image Modal */}
+      {/* Profile/PAN Image Lightbox Modal (WhatsApp/Instagram Style with ban symbol icon to exit) */}
       {showImageModal && (
-        <>
-          <div
-            className="modal fade show"
-            style={{ display: "block", backgroundColor: "rgba(0,0,0,0.85)" }}
-            onClick={() => setShowImageModal(false)}
-          >
-            <div className="modal-dialog modal-dialog-centered modal-xl">
-              <div
-                className="modal-content border-0 bg-transparent shadow-none"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="modal-body text-center position-relative">
-                  <button
-                    className="btn btn-light rounded-circle position-absolute"
-                    style={{ top: "10px", right: "10px", zIndex: 1000 }}
-                    onClick={() => setShowImageModal(false)}
-                  >
-                    ✕
-                  </button>
-                  <h5 className="text-white mb-3">{imageTitle}</h5>
-                  <img
-                    src={selectedImage}
-                    alt={imageTitle}
-                    className="img-fluid rounded shadow"
-                    style={{ maxHeight: "80vh", objectFit: "contain" }}
-                  />
-                </div>
-              </div>
-            </div>
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center z-5"
+          style={{ backgroundColor: "rgba(0,0,0,0.9)", backdropFilter: "blur(5px)" }}
+          onClick={() => setShowImageModal(false)}
+        >
+          {/* Top Info bar with ban symbol exit button */}
+          <div className="position-absolute top-0 start-0 w-100 p-3 d-flex justify-content-between align-items-center text-white px-md-5" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.7), transparent)" }}>
+            <span className="fw-semibold fs-6">{imageTitle}</span>
+            <button
+              className="btn btn-danger bg-opacity-75 border-0 rounded-circle text-white d-flex align-items-center justify-content-center"
+              style={{ width: "42px", height: "42px" }}
+              onClick={() => setShowImageModal(false)}
+              title="Close Preview"
+            >
+              <FaBan size={20} />
+            </button>
           </div>
-          <div className="modal-backdrop fade show"></div>
-        </>
+
+          {/* Centered Large Image */}
+          <div 
+            className="p-2 d-flex align-items-center justify-content-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={selectedImage}
+              alt="Preview Zoom"
+              className="img-fluid rounded-3 shadow-lg"
+              style={{ maxHeight: "82vh", maxWidth: "90vw", objectFit: "contain" }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

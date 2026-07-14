@@ -37,7 +37,7 @@ const DonorSlotPage = () => {
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(null);
 
-  // Sidebar visibility state: hidden by default
+  // Responsive mobile states for persistent desktop and toggleable mobile sidebar
   const [showSidebar, setShowSidebar] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
@@ -49,11 +49,21 @@ const DonorSlotPage = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 992);
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setShowSidebar(false);
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setShowSidebar(!showSidebar);
+    }
+  };
 
   useEffect(() => {
     fetchSlots();
@@ -122,19 +132,22 @@ const DonorSlotPage = () => {
   const currentList = slots[activeTab] || [];
 
   return (
-    <div className="d-flex min-h-screen bg-light position-relative">
-      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
-      {showSidebar && (
+    <div
+      className="d-flex min-h-screen bg-light position-relative"
+      style={{ overflowX: "hidden", width: "100%", maxWidth: "100%" }}
+    >
+      {/* Permanent Sidebar on Desktop / Conditional Overlay on Mobile */}
+      {(!isMobile || showSidebar) && (
         <div
-          className="position-fixed top-0 start-0 z-3 bg-white"
-          style={{ height: "100vh" }}
+          className="position-fixed top-0 start-0 z-3 bg-white shadow-sm"
+          style={{ height: "100vh", width: "250px" }}
         >
           <DonorSidebar />
         </div>
       )}
 
-      {/* Backdrop for overlay click when sidebar is open */}
-      {showSidebar && (
+      {/* Backdrop for mobile overlay when sidebar is toggled open */}
+      {isMobile && showSidebar && (
         <div
           className="position-fixed top-0 start-0 w-100 h-100 z-2"
           style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
@@ -149,8 +162,12 @@ const DonorSlotPage = () => {
       />
 
       <div
-        className="pb-5 w-100"
-        style={{ marginLeft: isMobile ? "0px" : "250px", minHeight: "100vh" }}
+        className="flex-grow-1 bg-light pb-5 w-100"
+        style={{
+          marginLeft: isMobile ? "0px" : "250px",
+          minHeight: "100vh",
+          overflowX: "hidden",
+        }}
       >
         {/* Top Header with Hamburger / Three Lines Symbol */}
         <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
@@ -158,7 +175,7 @@ const DonorSlotPage = () => {
             <button
               className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
               style={{ width: "38px", height: "38px" }}
-              onClick={() => setShowSidebar(!showSidebar)}
+              onClick={toggleSidebar}
               title="Toggle Menu"
             >
               {showSidebar ? (
@@ -172,7 +189,7 @@ const DonorSlotPage = () => {
           </div>
         </div>
 
-        <div className="container px-4" style={{ maxWidth: "900px" }}>
+        <div className="container px-3 px-md-4" style={{ maxWidth: "900px" }}>
           {/* Navigation Tabs */}
           <div className="d-flex gap-2 border-bottom pb-3 mb-4 overflow-auto">
             {[
@@ -185,7 +202,7 @@ const DonorSlotPage = () => {
             ].map((tab) => (
               <button
                 key={tab}
-                className={`btn btn-sm d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-pill ${
+                className={`btn btn-sm d-flex align-items-center gap-2 px-3 py-2 fw-semibold rounded-pill text-nowrap ${
                   activeTab === tab ? "btn-success" : "btn-light text-dark"
                 }`}
                 onClick={() => setActiveTab(tab)}
@@ -227,7 +244,7 @@ const DonorSlotPage = () => {
                     key={item.bookingId}
                     className="card border-0 shadow-xs rounded-3 p-3 bg-white"
                   >
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
                       <div>
                         <span className="badge bg-success x-small mb-1">
                           {item.bookingStatus}
@@ -302,8 +319,8 @@ const DonorSlotPage = () => {
                   onClick={() => setShowCancelModal(false)}
                 ></button>
               </div>
-              <div className="modal-body">
-                <p className="text-secondary small mb-0">
+              <div className="modal-body small">
+                <p className="text-secondary mb-0">
                   Are you sure you want to cancel this visit slot? This action
                   cannot be undone.
                 </p>

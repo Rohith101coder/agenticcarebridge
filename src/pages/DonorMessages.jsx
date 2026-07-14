@@ -10,11 +10,21 @@ const DonorMessages = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 992);
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setShowSidebar(false);
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setShowSidebar(!showSidebar);
+    }
+  };
 
   // Dummy messages data matching the style of previous pages
   const messages = [
@@ -37,19 +47,22 @@ const DonorMessages = () => {
   ];
 
   return (
-    <div className="d-flex min-h-screen bg-light position-relative">
-      {/* Sidebar overlay / toggle layout with hidden-by-default behavior */}
-      {showSidebar && (
+    <div
+      className="d-flex min-h-screen bg-light position-relative"
+      style={{ overflowX: "hidden", width: "100%", maxWidth: "100%" }}
+    >
+      {/* Permanent Sidebar on Desktop / Conditional Overlay on Mobile */}
+      {(!isMobile || showSidebar) && (
         <div
-          className="position-fixed top-0 start-0 z-3 bg-white"
-          style={{ height: "100vh" }}
+          className="position-fixed top-0 start-0 z-3 bg-white shadow-sm"
+          style={{ height: "100vh", width: "250px" }}
         >
           <DonorSidebar />
         </div>
       )}
 
-      {/* Backdrop for overlay click when sidebar is open */}
-      {showSidebar && (
+      {/* Backdrop for mobile overlay when sidebar is toggled open */}
+      {isMobile && showSidebar && (
         <div
           className="position-fixed top-0 start-0 w-100 h-100 z-2"
           style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
@@ -58,8 +71,12 @@ const DonorMessages = () => {
       )}
 
       <div
-        className="pb-5 w-100"
-        style={{ marginLeft: isMobile ? "0px" : "250px", minHeight: "100vh" }}
+        className="flex-grow-1 bg-light pb-5 w-100"
+        style={{
+          marginLeft: isMobile ? "0px" : "250px",
+          minHeight: "100vh",
+          overflowX: "hidden",
+        }}
       >
         {/* Top Header with Hamburger / Three Lines Symbol */}
         <div className="bg-white shadow-xs py-2 mb-3 sticky-top z-1">
@@ -67,7 +84,7 @@ const DonorMessages = () => {
             <button
               className="btn btn-light border-0 shadow-xs d-flex align-items-center justify-content-center rounded-circle"
               style={{ width: "38px", height: "38px" }}
-              onClick={() => setShowSidebar(!showSidebar)}
+              onClick={toggleSidebar}
               title="Toggle Menu"
             >
               {showSidebar ? (
@@ -82,7 +99,7 @@ const DonorMessages = () => {
         </div>
 
         {/* Messages Container */}
-        <div className="container px-4" style={{ maxWidth: "800px" }}>
+        <div className="container px-3 px-md-4" style={{ maxWidth: "800px" }}>
           {messages.length === 0 ? (
             <div className="text-center py-5 text-muted bg-white rounded-4 shadow-xs p-4">
               <h6 className="fw-semibold">No messages in your inbox</h6>
@@ -105,7 +122,7 @@ const DonorMessages = () => {
                       <FaEnvelope />
                     </div>
                     <div className="flex-grow-1">
-                      <div className="d-flex justify-content-between align-items-center mb-1">
+                      <div className="d-flex justify-content-between align-items-center mb-1 flex-wrap gap-1">
                         <h6 className="fw-bold text-dark mb-0">
                           {item.sender}
                         </h6>
