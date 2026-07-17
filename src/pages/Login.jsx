@@ -156,8 +156,10 @@ const Login = () => {
                     <input
                       type="email"
                       className="form-control"
+                      data-ai="login-email"
                       placeholder="Enter your email"
                       value={email}
+                      autoComplete="false"
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
@@ -172,8 +174,10 @@ const Login = () => {
                     <input
                       type={showPassword ? "text" : "password"}
                       className="form-control"
+                      data-ai="login-password"
                       placeholder="Enter your password"
                       value={password}
+                      autoComplete="false"
                       onChange={(e) => setPassword(e.target.value)}
                     />
                     <span
@@ -197,6 +201,7 @@ const Login = () => {
 
                 <button
                   type="submit"
+                  data-ai="login-submit"
                   className="btn btn-success w-100 py-2 fw-semibold"
                 >
                   Login →

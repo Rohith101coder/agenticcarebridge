@@ -40,10 +40,11 @@ import MyVisitsPage from "../pages/MyVisitsPage";
 import DonorNotifications from "../pages/DonorNotifications";
 import DonorMessages from "../pages/DonorMessages";
 import GlobalSlotsPage from "../pages/GlobalSlotsPage";
+import TestVoice from "../pages/TestVoice";
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
+   
       <Routes>
         {/*donor routes */}
         <Route path="/donor/dashboard" element={<DonorDashboard />} />
@@ -108,8 +109,11 @@ const AppRoutes = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-otp" element={<VerifyForgotEmail />} />
+
+        {/*ai related routes */}
+        <Route path="/test-voice" element={<TestVoice />} />
       </Routes>
-    </BrowserRouter>
+   
   );
 };
 

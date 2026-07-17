@@ -163,6 +163,7 @@ const handleRegister = async () => {
                   <input
                     type="text"
                     className="form-control"
+                    data-ai="register-name"
                     placeholder="Enter your full name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -182,6 +183,7 @@ const handleRegister = async () => {
                   <input
                     type="email"
                     className="form-control"
+                    data-ai="register-email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -201,6 +203,7 @@ const handleRegister = async () => {
                   <input
                     type={showPassword ? "text" : "password"}
                     className="form-control"
+                    data-ai="register-password"
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -223,6 +226,7 @@ const handleRegister = async () => {
                   <select
                     className="form-select"
                     value={role}
+                    data-ai="register-role"
                     onChange={(e) => setRole(e.target.value)}
                   >
                     <option value="">Select your role</option>
@@ -240,6 +244,7 @@ const handleRegister = async () => {
 
               <button
                 className="btn btn-success w-100 py-2 fw-semibold"
+                data-ai="register-submit"
                 onClick={handleRegister}
               >
                 Register →
