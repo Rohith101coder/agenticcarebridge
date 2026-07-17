@@ -2,8 +2,7 @@ const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 class AIService {
   async ask(prompt) {
-    console.log(`${import.meta.env.VITE_OPENROUTER_API_KEY}`);
-    console.log(`${import.meta.env.VITE_OPENROUTER_MODEL}`);
+  
     const response = await fetch(OPENROUTER_URL, {
       method: "POST",
 
