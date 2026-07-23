@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "https://carebridgechatbot.onrender.com/api/chat";
+const API = "https://carebridgechatbot1.onrender.com/api/chat";
 
 export const askCareBot = async (message,history) => {
   const response = await axios.post(API, {
